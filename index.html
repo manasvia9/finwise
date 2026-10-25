@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Finwise – AI Finance Advisor</title>
+<style>
+:root{--bg:#fff;--bg2:#faf3f3;--ink:#1a1a1a;--mute:#6b6262;--red:#d62828;--red2:#a61b1b;--line:#ecdcdc;--card:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121010;--bg2:#1b1616;--ink:#f6eeee;--mute:#a99c9c;--line:#3a2c2c;--card:#1b1616;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121010;--bg2:#1b1616;--ink:#f6eeee;--mute:#a99c9c;--line:#3a2c2c;--card:#1b1616;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,Arial,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;margin:0 0 .4em;letter-spacing:-.01em}
+button,input,select{font:inherit;color:inherit}
+.btn{background:var(--red);color:#fff;border:0;border-radius:8px;padding:10px 16px;cursor:pointer;font-weight:600}
+.btn:hover{background:var(--red2)}.btn.k{background:#111;color:#fff}.btn.o{background:transparent;color:var(--red);border:1.5px solid var(--red)}
+input,select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);margin:4px 0 12px}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--red);outline-offset:1px}
+label{font-size:13px;color:var(--mute)}
+#auth{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.hero{background:var(--red);color:#fff;padding:48px;display:flex;flex-direction:column;justify-content:space-between}
+.hero h1{font-size:clamp(34px,5vw,60px);line-height:1.05}.hero p{max-width:420px;opacity:.92}
+.hero .big{font:700 clamp(70px,12vw,150px)/1 Georgia,serif;opacity:.95;border-bottom:6px solid #111;display:inline-block}
+.form{padding:48px;display:flex;flex-direction:column;justify-content:center;max-width:460px;width:100%;margin:auto}
+.tabs{display:flex;gap:6px;margin-bottom:18px}.tabs button{flex:1;padding:9px;border:1.5px solid var(--line);background:none;border-radius:8px;cursor:pointer}
+.tabs .on{background:#111;color:#fff;border-color:#111}
+#app{display:none;min-height:100vh;grid-template-columns:220px 1fr}
+nav{background:#111;color:#fff;padding:20px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+nav .logo{font:700 22px Georgia,serif;padding:4px 10px 16px}nav .logo b{color:var(--red)}
+nav button{background:none;border:0;color:#d9cfcf;text-align:left;padding:10px 12px;border-radius:8px;cursor:pointer}
+nav button.on{background:var(--red);color:#fff}nav button:hover:not(.on){background:#2a2222}
+nav .sp{flex:1}
+main{padding:28px;max-width:1100px;width:100%}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card.red{background:var(--red);color:#fff;border:0}.card.blk{background:#111;color:#fff;border:0}
+.k{font-size:13px;opacity:.8}.v{font:700 28px Georgia,serif}
+.bar{height:9px;background:var(--bg2);border-radius:9px;overflow:hidden;border:1px solid var(--line)}.bar i{display:block;height:100%;background:var(--red)}.bar i.w{background:#111}.bar i.x{background:var(--red2)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:8px}
+.pill{font-size:12px;padding:2px 9px;border-radius:20px;background:var(--bg2);border:1px solid var(--line)}
+.tip{border-left:4px solid var(--red);padding:8px 12px;background:var(--bg2);border-radius:0 8px 8px 0;margin:8px 0}.tip.g{border-color:#111}
+.chat{height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px;padding:6px}
+.m{max-width:82%;padding:9px 13px;border-radius:14px}.m.u{align-self:flex-end;background:var(--red);color:#fff}.m.a{background:var(--bg2);border:1px solid var(--line)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chips button{border:1.5px solid var(--red);background:none;color:var(--red);border-radius:20px;padding:4px 11px;cursor:pointer;font-size:13px}
+.inl{display:flex;gap:8px}.inl input{margin:0}
+.ring{position:relative;width:140px;height:140px;margin:auto}.ring b{position:absolute;inset:0;display:grid;place-items:center;font:700 34px Georgia,serif}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:8px;z-index:9;border-bottom:3px solid var(--red)}
+@media(max-width:760px){#auth{grid-template-columns:1fr}.hero{padding:28px}.form{padding:28px}
+#app{grid-template-columns:1fr}nav{height:auto;position:sticky;flex-direction:row;overflow-x:auto;z-index:5;padding:8px;top:0}nav .logo,nav .sp{display:none}nav button{white-space:nowrap}main{padding:16px}}
+</style></head><body>
+
+<section id="auth">
+ <div class="hero"><div class="logo" style="font:700 24px Georgia,serif">Fin<span style="border-bottom:3px solid #111">wise</span></div>
+  <div><span class="big">₹</span><h1>Know where every rupee goes.</h1><p>Connect your UPI app, set a budget you can keep, and get plain-language advice from your AI money coach.</p></div>
+  <small>Demo app. Your data stays in this browser.</small></div>
+ <div class="form">
+  <div class="tabs"><button id="tL" class="on" onclick="tab('L')">Log in</button><button id="tS" onclick="tab('S')">Create account</button></div>
+  <h2 id="ft">Welcome back</h2>
+  <div id="nmW" style="display:none"><label>Full name</label><input id="nm" autocomplete="name"></div>
+  <label>Email</label><input id="em" type="email" autocomplete="email">
+  <label>Password (min 6 characters)</label><input id="pw" type="password" autocomplete="current-password">
+  <div id="err" style="color:var(--red);min-height:20px;font-size:13px"></div>
+  <button class="btn" id="go" onclick="authGo()">Log in</button>
+ </div>
+</section>
+
+<section id="app">
+ <nav><div class="logo">Fin<b>wise</b></div>
+  <button data-v="dash" class="on">Dashboard</button><button data-v="budget">Budget planner</button><button data-v="tax">Tax &amp; take-home</button><button data-v="tx">Transactions</button>
+  <button data-v="upi">UPI connect</button><button data-v="ai">AI advisor</button><button data-v="goals">Savings goals</button>
+  <div class="sp"></div><button onclick="logout()">Log out</button></nav>
+ <main id="main"></main>
+</section>
+<div id="toast" class="toast" style="display:none"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const CATS={Food:'#d62828',Transport:'#111111',Shopping:'#ff7a7a',Bills:'#8c1414',Entertainment:'#f2b2b2',Health:'#666666',Other:'#c9c0c0'};
+const KW={Food:/swiggy|zomato|cafe|restaurant|bigbasket|blinkit|dominos|food|chai|bakery/i,Transport:/uber|ola|rapido|metro|petrol|fuel|irctc|redbus/i,Shopping:/amazon|flipkart|myntra|ajio|meesho/i,Bills:/jio|airtel|bescom|electric|rent|recharge|broadband|gas|water/i,Entertainment:/netflix|spotify|bookmyshow|hotstar|prime|game/i,Health:/apollo|pharm|medplus|hospital|clinic|gym|doctor/i};
+const cat=t=>Object.keys(KW).find(k=>KW[k].test(t))||'Other';
+const PLAN={Food:20,Transport:8,Bills:17,Health:5,Shopping:15,Entertainment:7,Other:8};
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+let user=null,D=null,view='dash',chat=[],mode='L';
+const ld=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f}catch(e){return f}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const save=()=>sv('fw_d_'+user.email,D);
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2600)}
+
+/* auth */
+function tab(m){mode=m;$('#tL').className=m=='L'?'on':'';$('#tS').className=m=='S'?'on':'';$('#nmW').style.display=m=='S'?'block':'none';$('#ft').textContent=m=='S'?'Start your money plan':'Welcome back';$('#go').textContent=m=='S'?'Create account':'Log in';$('#err').textContent=''}
+function authGo(){const em=$('#em').value.trim().toLowerCase(),pw=$('#pw').value,nm=$('#nm').value.trim(),us=ld('fw_u',{});
+ if(!/^\S+@\S+\.\S+$/.test(em))return $('#err').textContent='Enter a valid email address.';
+ if(pw.length<6)return $('#err').textContent='Password needs at least 6 characters.';
+ if(mode=='S'){if(!nm)return $('#err').textContent='Enter your name.';if(us[em])return $('#err').textContent='This email already has an account. Log in instead.';us[em]={name:nm,pw:btoa(pw)};sv('fw_u',us)}
+ else if(!us[em]||us[em].pw!==btoa(pw))return $('#err').textContent='Email or password is incorrect.';
+ start({email:em,name:us[em].name})}
+function start(u){user=u;sv('fw_s',u);D=ld('fw_d_'+u.email,null)||{income:50000,budgets:{...Object.fromEntries(Object.entries(PLAN).map(([k,p])=>[k,Math.round(50000*p/100)]))},tx:[],upi:null,goals:[]};
+ $('#auth').style.display='none';$('#app').style.display='grid';chat=[{r:'a',t:`Hi ${u.name.split(' ')[0]}! I’m your AI money coach. Connect UPI to import expenses, then ask me anything about your budget.`}];go('dash')}
+function logout(){try{localStorage.removeItem('fw_s')}catch(e){}location.reload()}
+document.querySelectorAll('nav button[data-v]').forEach(b=>b.onclick=()=>go(b.dataset.v));
+
+/* data helpers */
+const spent=()=>{const s={};Object.keys(CATS).forEach(k=>s[k]=0);D.tx.forEach(t=>s[t.cat]+=t.amt);return s};
+const tot=()=>D.tx.reduce((a,t)=>a+t.amt,0);
+const lim=()=>Object.values(D.budgets).reduce((a,b)=>a+b,0);
+function score(){const s=spent(),r=D.income?(D.income-tot())/D.income:0;let over=Object.keys(s).filter(k=>s[k]>D.budgets[k]).length;return Math.max(0,Math.min(100,Math.round(45+r*150-over*7)))}
+function insights(){const s=spent(),T=tot(),o=[],inc=D.income;
+ if(!D.tx.length)return[['Nothing to analyse yet','Connect UPI or add an expense and I’ll start finding savings.','g']];
+ Object.keys(s).filter(k=>s[k]>D.budgets[k]).sort((a,b)=>(s[b]-D.budgets[b])-(s[a]-D.budgets[a])).slice(0,2).forEach(k=>o.push([`${k} is over budget`,`You spent ${inr(s[k])} against a ${inr(D.budgets[k])} limit. Trimming ${inr((s[k]-D.budgets[k])/4)} per week gets you back on track.`,'']));
+ const rate=(inc-T)/inc*100;
+ o.push(rate>=20?['Savings rate looks healthy',`You’re saving about ${rate.toFixed(0)}% of income. Move the extra into a goal so it doesn’t get spent.`,'g']:['Savings below the 20% target',`You’re saving ${Math.max(0,rate).toFixed(0)}%. Aim for ${inr(inc*.2)} a month — automate it on salary day.`,'']);
+ const top=Object.keys(s).sort((a,b)=>s[b]-s[a])[0];o.push(['Biggest spend: '+top,`${(s[top]/T*100).toFixed(0)}% of your spending. Small cuts here have the largest effect.`,'g']);
+ const small=D.tx.filter(t=>t.amt<300).length;if(small>12)o.push(['Many small UPI payments',`${small} payments under ₹300 add up quietly. Try a weekly cash-limit for small purchases.`,'']);
+ return o}
+function reply(q){q=q.toLowerCase();const s=spent(),T=tot(),inc=D.income,L=lim();
+ if(/budget|plan|50/.test(q))return`Try the 50/30/20 rule: ${inr(inc*.5)} for needs (food, bills, transport, health), ${inr(inc*.3)} for wants, ${inr(inc*.2)} for savings. Open Budget planner and tap “Auto-plan” to apply it.`;
+ if(/over|reduce|cut|save|spend less/.test(q)){const k=Object.keys(s).sort((a,b)=>s[b]-s[a])[0];return T?`Start with ${k}: it’s your largest category at ${inr(s[k])}. Cut it by 15% and you free ${inr(s[k]*.15)} a month. Also review subscriptions and repeat food-delivery orders.`:'Add some expenses first and I’ll find the best places to cut.'}
+ if(/emergency|fund/.test(q))return`Build an emergency fund of 6 months’ expenses. For you that’s about ${inr((T||inc*.7)*6)}. Keep it in a liquid fund or savings account, separate from daily money.`;
+ if(/invest|sip|mutual|stock/.test(q))return`Once your emergency fund is started, a monthly SIP in a diversified index fund is a common beginner route. Keep ${inr(inc*.2)} as your saving target. This is general education, not personalised investment advice.`;
+ if(/score|health/.test(q))return`Your money health score is ${score()}/100. It rises when you save more than 20% and stay within category limits.`;
+ if(/left|remain|balance/.test(q))return`You’ve spent ${inr(T)} of your ${inr(L)} budget. ${L>=T?inr(L-T)+' remains.':'You’re over by '+inr(T-L)+'.'}`;
+ if(/upi|phone|gpay|paytm/.test(q))return`Go to UPI connect, link your UPI ID and sync. You can also paste a bank SMS and I’ll categorise it.`;
+ return`Here’s what I see: you’ve spent ${inr(T)} against a ${inr(L)} budget, with a health score of ${score()}/100. Ask me about budgeting, cutting costs, emergency funds or investing.`}
+
+/* views */
+function go(v){view=v;document.querySelectorAll('nav button[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v==v));
+ const f={dash,budget,tax,tx,upi,ai,goals}[v];$('#main').innerHTML=f();if(v=='ai'){const c=$('#chat');c.scrollTop=c.scrollHeight}window.scrollTo(0,0)}
+const head=(t,s)=>`<div class="top"><div><h1>${t}</h1><span style="color:var(--mute)">${s}</span></div></div>`;
+function donut(){const s=spent(),T=tot()||1;let off=0,seg='';Object.keys(s).forEach(k=>{const p=s[k]/T*100;if(p>0){seg+=`<circle r="15.9" cx="21" cy="21" fill="none" stroke="${CATS[k]}" stroke-width="6" stroke-dasharray="${p} ${100-p}" stroke-dashoffset="${-off}"/>`;off+=p}});
+ return`<div class="ring"><svg viewBox="0 0 42 42" style="transform:rotate(-90deg)"><circle r="15.9" cx="21" cy="21" fill="none" stroke="var(--bg2)" stroke-width="6"/>${seg}</svg><b>${D.tx.length}</b></div>`}
+function dash(){const s=spent(),T=tot(),sc=score(),left=D.income-T;
+ return head('Hi, '+user.name.split(' ')[0],'Your last 30 days at a glance')+`
+ <div class="grid g4"><div class="card red"><div class="k">Monthly income</div><div class="v">${inr(D.income)}</div></div>
+ <div class="card blk"><div class="k">Spent</div><div class="v">${inr(T)}</div></div>
+ <div class="card"><div class="k">Left to spend or save</div><div class="v" style="color:${left<0?'var(--red)':'inherit'}">${inr(left)}</div></div>
+ <div class="card"><div class="k">Money health score</div><div class="v">${sc}/100</div><div class="bar"><i style="width:${sc}%"></i></div></div></div>
+ <div class="grid g2" style="margin-top:14px"><div class="card"><h3>Spending by category</h3>${D.tx.length?donut():'<p>No expenses yet. <a href="#" onclick="go(\'upi\');return false" style="color:var(--red)">Connect UPI</a> to import them.</p>'}
+ <div style="margin-top:12px">${Object.keys(s).filter(k=>s[k]).map(k=>`<div class="row"><span><i class="dot" style="background:${CATS[k]}"></i>${k}</span><b>${inr(s[k])}</b></div>`).join('')}</div></div>
+ <div class="card"><h3>AI insights</h3>${insights().map(i=>`<div class="tip ${i[2]}"><b>${i[0]}</b><br>${i[1]}</div>`).join('')}<button class="btn o" onclick="go('ai')">Ask the advisor</button></div></div>
+ <div class="card" style="margin-top:14px"><h3>Recent transactions</h3>${D.tx.slice(0,5).map(txRow).join('')||'<p>Nothing yet.</p>'}</div>`}
+const txRow=t=>`<div class="row"><span><i class="dot" style="background:${CATS[t.cat]}"></i>${t.desc}<br><small style="color:var(--mute)">${t.d} · ${t.cat}${t.src=='upi'?' · UPI':''}</small></span><b>−${inr(t.amt)}</b></div>`;
+function budget(){const s=spent(),L=lim(),pct=D.income?L/D.income*100:0;
+ return head('Budget planner','Set a limit for each category and track it')+`
+ <div class="card"><div class="grid g2"><div><label>Monthly income (₹)</label><input id="inc" type="number" min="0" value="${D.income}" onchange="setInc(this.value)"></div>
+ <div style="align-self:end;margin-bottom:12px"><button class="btn" onclick="auto()">Auto-plan with 50/30/20</button></div></div>
+ <p>Budgeted ${inr(L)} of ${inr(D.income)} (${pct.toFixed(0)}%). Unbudgeted savings: <b>${inr(D.income-L)}</b>.</p>
+ ${pct>100?'<div class="tip"><b>Your limits exceed your income.</b> Lower a category or raise income.</div>':''}</div>
+ <div class="grid g2" style="margin-top:14px">${Object.keys(CATS).map(k=>{const b=D.budgets[k]||0,p=b?s[k]/b*100:(s[k]?100:0);
+ return`<div class="card"><div class="row" style="border:0;padding:0"><b><i class="dot" style="background:${CATS[k]}"></i>${k}</b><span class="pill">${p>100?'Over':p>80?'Close to limit':'On track'}</span></div>
+ <div class="bar" style="margin:10px 0"><i class="${p>100?'x':''}" style="width:${Math.min(100,p)}%"></i></div>
+ <div class="row" style="border:0;padding:0"><small>${inr(s[k])} spent</small><span style="width:120px"><input type="number" min="0" value="${b}" aria-label="${k} limit" style="margin:0;padding:6px" onchange="setB('${k}',this.value)"></span></div></div>`}).join('')}</div>
+ <div class="card blk" style="margin-top:14px"><h3>How to manage your budget</h3>
+ <p>1. Pay yourself first: move 20% to savings on salary day.<br>2. Keep needs near 50% and wants near 30%.<br>3. Check this page weekly, not monthly. Small overshoots are easy to fix early.<br>4. Cap one “leak” category (usually food delivery or shopping) with a weekly limit.<br>5. Keep a buffer: leave 5–10% unassigned for surprises.</p></div>`}
+function setInc(v){D.income=Math.max(0,+v||0);save();go('budget')}
+function setB(k,v){D.budgets[k]=Math.max(0,+v||0);save();go('budget')}
+function auto(){Object.keys(PLAN).forEach(k=>D.budgets[k]=Math.round(D.income*PLAN[k]/100));save();toast('Budget set using the 50/30/20 rule');go('budget')}
+function tx(){return head('Transactions','Add or review expenses')+`<div class="card"><h3>Add expense</h3><div class="inl" style="flex-wrap:wrap">
+ <input id="td" placeholder="Where did you spend? e.g. Zomato" style="flex:2;min-width:180px"><input id="ta" type="number" min="1" placeholder="Amount ₹" style="flex:1;min-width:100px"><button class="btn" onclick="addTx()">Add expense</button></div></div>
+ <div class="card" style="margin-top:14px"><h3>All expenses (${D.tx.length})</h3>${D.tx.map(t=>txRow(t).replace('</b></div>',`</b><button class="pill" style="cursor:pointer" onclick="delTx('${t.id}')">Remove</button></div>`)).join('')||'<p>No expenses yet.</p>'}</div>`}
+function addTx(){const d=$('#td').value.trim(),a=+$('#ta').value;if(!d||!(a>0))return toast('Enter a place and an amount.');push(d,a,'manual',new Date());save();toast('Expense added');go('tx')}
+function push(desc,amt,src,dt){D.tx.unshift({id:Math.random().toString(36).slice(2),desc,amt:Math.round(amt),cat:cat(desc),src,d:dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'}),ts:+dt});D.tx.sort((a,b)=>b.ts-a.ts)}
+function delTx(id){D.tx=D.tx.filter(t=>t.id!=id);save();go('tx')}
+function upi(){const u=D.upi;return head('UPI connect','Import expenses straight from your UPI app')+(u?`
+ <div class="card red"><h3>Connected</h3><p>${u.app} · ${u.id}<br>Last sync: ${u.last}</p><button class="btn k" onclick="sync()">Sync now</button> <button class="btn" style="background:#fff;color:var(--red)" onclick="D.upi=null;save();go('upi')">Disconnect</button></div>`:`
+ <div class="card"><h3>Link your UPI app</h3><label>UPI app</label><select id="ua"><option>Google Pay</option><option>PhonePe</option><option>Paytm</option><option>BHIM</option></select>
+ <label>UPI ID</label><input id="ui" placeholder="name@okbank"><button class="btn" onclick="conn()">Connect and import</button>
+ <p style="color:var(--mute);font-size:13px">Demo mode: this imports sample UPI payments. A live link needs a bank-approved Account Aggregator or UPI partner integration on a secure server.</p></div>`)+`
+ <div class="card" style="margin-top:14px"><h3>Paste a bank or UPI SMS</h3><input id="sms" placeholder="Rs 450 debited via UPI to SWIGGY on 24-10-26">
+ <button class="btn k" onclick="parseSms()">Read and add expense</button></div>`}
+function conn(){const id=$('#ui').value.trim();if(!/^[\w.\-]+@[\w]+$/.test(id))return toast('Enter a valid UPI ID like name@okbank');D.upi={app:$('#ua').value,id,last:''};sync()}
+function sync(){const M=[['Swiggy',[180,420]],['Zomato',[150,500]],['Uber',[120,380]],['Rapido',[60,180]],['Amazon',[400,2500]],['Myntra',[600,2200]],['Jio Recharge',[299,299]],['BESCOM Electricity',[900,1600]],['Netflix',[199,649]],['Apollo Pharmacy',[150,900]],['BigBasket',[600,2200]],['Metro Card',[100,500]],['Chai Point',[40,120]],['House Rent',[9000,9000]],['Spotify',[119,119]]];
+ D.tx=D.tx.filter(t=>t.src!='upi');const now=Date.now();let n=0;
+ for(let i=0;i<30;i++){const c=Math.random()<.9?1:2;for(let j=0;j<c;j++){const m=M[Math.floor(Math.random()*M.length)];if(m[0]=='House Rent'&&i!=3)continue;push(m[0],m[1][0]+Math.random()*(m[1][1]-m[1][0]),'upi',new Date(now-i*864e5));n++}}
+ D.upi.last=new Date().toLocaleString('en-IN');save();toast(n+' UPI payments imported');go('upi')}
+function parseSms(){const t=$('#sms').value,m=t.match(/(?:rs\.?|inr|₹)\s?([\d,]+(?:\.\d+)?)/i),w=t.match(/\bto\s+([A-Za-z0-9 .&-]+?)(?:\s+on\b|\s+ref\b|\.|$)/i);
+ if(!m)return toast('Could not find an amount in that message.');push(w?w[1].trim():'UPI payment',+m[1].replace(/,/g,''),'upi',new Date());save();toast('Expense added from SMS');go('tx')}
+function ai(){return head('AI advisor','Ask about your budget, savings or spending')+`<div class="card"><div class="chat" id="chat">${chat.map(m=>`<div class="m ${m.r}">${m.t}</div>`).join('')}</div>
+ <div class="chips">${['How should I budget?','Where can I cut spending?','How much is left?','Emergency fund','Should I invest?','My health score'].map(q=>`<button onclick="ask('${q}')">${q}</button>`).join('')}</div>
+ <div class="inl"><input id="q" placeholder="Ask your advisor..." onkeydown="if(event.key=='Enter')ask()"><button class="btn" onclick="ask()">Send</button></div></div>`}
+function ask(q){q=q||$('#q').value.trim();if(!q)return;chat.push({r:'u',t:q.replace(/</g,'&lt;')},{r:'a',t:reply(q)});go('ai')}
+function goals(){return head('Savings goals','Give your savings a purpose')+`<div class="card"><div class="inl" style="flex-wrap:wrap"><input id="gn" placeholder="Goal, e.g. Goa trip" style="flex:2;min-width:160px"><input id="gt" type="number" min="1" placeholder="Target ₹" style="flex:1;min-width:100px"><button class="btn" onclick="addG()">Add goal</button></div></div>
+ <div class="grid g2" style="margin-top:14px">${D.goals.map((g,i)=>{const p=Math.min(100,g.saved/g.target*100),mo=Math.max(1,Math.ceil((g.target-g.saved)/Math.max(1,D.income*.2)));return`<div class="card"><div class="row" style="border:0;padding:0"><b>${g.name}</b><span class="pill">${p.toFixed(0)}%</span></div>
+ <div class="bar" style="margin:10px 0"><i class="w" style="width:${p}%"></i></div><small>${inr(g.saved)} of ${inr(g.target)}${p<100?` · about ${mo} month${mo>1?'s':''} at 20% savings`:' · Goal reached'}</small>
+ <div class="inl" style="margin-top:10px"><input id="c${i}" type="number" min="1" placeholder="Add ₹" style="padding:6px"><button class="btn k" onclick="contrib(${i})">Save</button></div></div>`}).join('')||'<div class="card">No goals yet. Add one above.</div>'}</div>`}
+function addG(){const n=$('#gn').value.trim(),t=+$('#gt').value;if(!n||!(t>0))return toast('Enter a goal name and target.');D.goals.push({name:n,target:t,saved:0});save();go('goals')}
+function contrib(i){const a=+$('#c'+i).value;if(!(a>0))return;D.goals[i].saved+=a;save();toast('Added '+inr(a));go('goals')}
+function calc(g,ded){const slab=(x,s)=>{let t=0,p=0;for(const[l,r]of s){if(x>p)t+=(Math.min(x,l)-p)*r;p=l}return t};
+ const nt=Math.max(0,g-75000);let n=slab(nt,[[4e5,0],[8e5,.05],[12e5,.1],[16e5,.15],[20e5,.2],[24e5,.25],[Infinity,.3]]);
+ n=nt<=12e5?0:Math.min(n,nt-12e5);
+ const ot=Math.max(0,g-50000-ded);let o=slab(ot,[[2.5e5,0],[5e5,.05],[10e5,.2],[Infinity,.3]]);if(ot<=5e5)o=0;
+ return{n:n*1.04,o:o*1.04,nt,ot}}
+function tax(){D.tax=D.tax||{gross:D.income,ded:0,reg:'new'};const T=D.tax,g=T.gross*12,r=calc(g,T.ded),yr=T.reg=='new'?r.n:r.o,mo=yr/12,home=T.gross-mo,alt=T.reg=='new'?r.o:r.n,best=r.n<=r.o?'new':'old',sv=Math.abs(r.n-r.o);
+ return head('Tax &amp; take-home','Estimated income tax for FY 2026-27 (salaried, India)')+`
+ <div class="card"><div class="grid g2"><div><label>Monthly gross salary (₹)</label><input type="number" min="0" value="${T.gross}" onchange="setTax('gross',this.value)"></div>
+ <div><label>Tax regime</label><select onchange="setTax('reg',this.value)"><option value="new" ${T.reg=='new'?'selected':''}>New regime (default)</option><option value="old" ${T.reg=='old'?'selected':''}>Old regime</option></select></div></div>
+ ${T.reg=='old'?`<label>Yearly deductions: 80C, 80D, HRA, home loan interest (₹)</label><input type="number" min="0" value="${T.ded}" onchange="setTax('ded',this.value)">`:''}</div>
+ <div class="grid g4" style="margin-top:14px"><div class="card"><div class="k">Gross income / month</div><div class="v">${inr(T.gross)}</div></div>
+ <div class="card blk"><div class="k">Tax cut / month</div><div class="v">${inr(mo)}</div></div>
+ <div class="card red"><div class="k">Balance after tax / month</div><div class="v">${inr(home)}</div></div>
+ <div class="card"><div class="k">Tax per year</div><div class="v">${inr(yr)}</div><small>${g?(yr/g*100).toFixed(1):0}% of gross</small></div></div>
+ <div class="grid g2" style="margin-top:14px"><div class="card"><h3>Regime comparison</h3>
+ <div class="row"><span>New regime tax (taxable ${inr(r.nt)})</span><b>${inr(r.n)}</b></div>
+ <div class="row"><span>Old regime tax (taxable ${inr(r.ot)})</span><b>${inr(r.o)}</b></div>
+ <div class="tip g">${sv<1?'Both regimes cost the same for you.':`The <b>${best} regime</b> is cheaper by ${inr(sv)} a year (${inr(sv/12)} a month).`}</div>
+ ${T.reg=='old'&&!T.ded?'<div class="tip">Enter your yearly deductions to get an accurate old regime figure.</div>':''}</div>
+ <div class="card"><h3>Use this in your budget</h3><p>Your budget should be built on money you actually receive, which is <b>${inr(home)}</b> a month after tax.</p>
+ <button class="btn" onclick="useHome(${Math.round(home)})">Set budget income to ${inr(home)}</button>
+ <p style="color:var(--mute);font-size:13px;margin-top:12px">Estimate only. It includes 4% cess and the standard deduction (₹75,000 new, ₹50,000 old) plus the Section 87A rebate. It leaves out surcharge on very high incomes, PF, professional tax and other employer deductions, so your payslip may differ.</p></div></div>`}
+function setTax(k,v){D.tax=D.tax||{gross:D.income,ded:0,reg:'new'};D.tax[k]=k=='reg'?v:Math.max(0,+v||0);save();go('tax')}
+function useHome(h){D.income=h;save();toast('Budget income set to '+inr(h));go('budget')}
+const s0=ld('fw_s',null);if(s0)start(s0);
+</script></body></html>
